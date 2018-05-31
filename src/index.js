@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 
 import Repo from '@components/Repo';
+import Header from '@components/Header';
 import NewRepoModal from '@components/NewRepoModal';
 
 class App extends Component {
@@ -46,6 +47,10 @@ class App extends Component {
       await AsyncStorage.setItem('@GitApi:repositories', JSON.stringify(this.state.repos));
   };
 
+  _modalShow = () => {
+    this.setState({ modalVisible: true });
+  }
+
   _modalClose = () => {
     this.setState({ modalVisible: false });
   }
@@ -56,15 +61,7 @@ class App extends Component {
 
     return (
       <View style={styles.container}>
-        <View style={styles.header}>
-          <Text style={styles.headerText}>
-            Welcome to Mini App GitApi!
-          </Text>
-
-          <TouchableOpacity onPress={ () => this.setState({ modalVisible: true }) }>
-            <Text style={styles.btnAdd}>+</Text>
-          </TouchableOpacity>
-        </View>
+        <Header  onShowModal={ this._modalShow } />
 
         <ScrollView contentContainerStyle={styles.repoList}>
           { listRepos }
@@ -85,28 +82,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#737373',
   },
-  header: {
-    height: (Platform.OS === 'ios') ? 70 : 50,
-    paddingTop: (Platform.OS === 'ios') ? 30 : 0,
-    backgroundColor: "#fff",
-    justifyContent: "space-between",
-    alignItems: "center",
-    flexDirection: 'row',
-    paddingHorizontal: 20
-  },
-  headerText: {
-    fontSize: 16,
-    fontWeight: "bold",
-    textAlign: 'center',
-  },
   repoList:{ 
     padding: 20 
   },
-  btnAdd: {
-    fontSize: 26,
-    fontWeight: 'bold',
-    color: '#4da6ff'
-  }
 });
 
 export default App;
