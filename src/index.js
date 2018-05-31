@@ -6,6 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Platform,
+  AsyncStorage
 } from 'react-native';
 
 import Repo from '@components/Repo';
@@ -17,13 +18,15 @@ class App extends Component {
     modalVisible: false
   }
 
+  async componentDidMount() {
+    const repos = JSON.parse( await AsyncStorage.getItem('@GitApi:repositories') ) || [];
+    
+    this.setState({ repos });
+  };
+
   _addOnRepository = async (newRepoText) => {
-      try {
-        const repoCall = await fetch(`http://api.github.com/repos/${newRepoText}`);
-        const response = await repoCall.json();
-      } catch (error) {
-        console.log(`Connection error with git api - ${error}`);
-      }
+      const repoCall = await fetch(`http://api.github.com/repos/${newRepoText}`);
+      const response = await repoCall.json();
 
       const repository = {
         id: response.id,
@@ -31,7 +34,7 @@ class App extends Component {
         title: response.name,
         author: response.owner.login
       };
-      
+
       this.setState({
         modalVisible: false,
         repos: [
@@ -39,6 +42,8 @@ class App extends Component {
           repository
         ]
       });
+
+      await AsyncStorage.setItem('@GitApi:repositories', JSON.stringify(this.state.repos));
   };
 
   _modalClose = () => {
@@ -98,8 +103,9 @@ const styles = StyleSheet.create({
     padding: 20 
   },
   btnAdd: {
-    fontSize: 24,
-    fontWeight: 'bold'
+    fontSize: 26,
+    fontWeight: 'bold',
+    color: '#4da6ff'
   }
 });
 
