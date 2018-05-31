@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 
 import Repo from '@components/Repo';
+import NewRepoModal from '@components/NewRepoModal';
 
 class App extends Component {
   state = {
@@ -53,6 +54,8 @@ class App extends Component {
         <ScrollView contentContainerStyle={styles.repoList}>
           { listRepos }
         </ScrollView>
+
+        <NewRepoModal />
       </View>
     );
   }
