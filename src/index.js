@@ -13,26 +13,36 @@ import NewRepoModal from '@components/NewRepoModal';
 
 class App extends Component {
   state = {
-    repos: [
-      {
-        id: 1,
-        image: 'https://avatars0.githubusercontent.com/u/5003309?s=460&v=4',
-        title: 'git-api',
-        author: 'roniewill',
-      },
-      {
-        id: 2,
-        image: 'https://avatars1.githubusercontent.com/u/6841591?s=400&v=4',
-        title: 'node-php-fpm',
-        author: 'ivansfl',
-      },
-      {
-        id: 3,
-        image: 'https://avatars0.githubusercontent.com/u/20171863?s=400&v=4',
-        title: 'react-native-redux',
-        author: 'kaueDM',
+    repos: [],
+    modalVisible: false
+  }
+
+  _addOnRepository = async (newRepoText) => {
+      try {
+        const repoCall = await fetch(`http://api.github.com/repos/${newRepoText}`);
+        const response = await repoCall.json();
+      } catch (error) {
+        console.log(`Connection error with git api - ${error}`);
       }
-    ]
+
+      const repository = {
+        id: response.id,
+        image: response.owner.avatar_url,
+        title: response.name,
+        author: response.owner.login
+      };
+      
+      this.setState({
+        modalVisible: false,
+        repos: [
+          ...this.state.repos,
+          repository
+        ]
+      });
+  };
+
+  _modalClose = () => {
+    this.setState({ modalVisible: false });
   }
 
   render() {
@@ -46,7 +56,7 @@ class App extends Component {
             Welcome to Mini App GitApi!
           </Text>
 
-          <TouchableOpacity onpress={ () => {} }>
+          <TouchableOpacity onPress={ () => this.setState({ modalVisible: true }) }>
             <Text style={styles.btnAdd}>+</Text>
           </TouchableOpacity>
         </View>
@@ -55,7 +65,11 @@ class App extends Component {
           { listRepos }
         </ScrollView>
 
-        <NewRepoModal />
+        <NewRepoModal 
+          onCancel={ this._modalClose }
+          onAdd={ this._addOnRepository }
+          visible={this.state.modalVisible}
+        />
       </View>
     );
   }
