@@ -7,8 +7,36 @@ import {
   Platform
 } from 'react-native';
 
+import Repo from '@components/Repo';
+
 class App extends Component {
+  state = {
+    repos: [
+      {
+        id: 1,
+        avatar: 'https://avatars0.githubusercontent.com/u/5003309?s=460&v=4',
+        title: 'git-api',
+        author: 'roniewill',
+      },
+      {
+        id: 2,
+        avatar: 'https://avatars1.githubusercontent.com/u/6841591?s=400&v=4',
+        title: 'node-php-fpm',
+        author: 'ivansfl',
+      },
+      {
+        id: 3,
+        avatar: 'https://avatars0.githubusercontent.com/u/20171863?s=400&v=4',
+        title: 'react-native-redux',
+        author: 'kaueDM',
+      }
+    ]
+  }
+
   render() {
+
+    const listRepos = this.state.repos.map( repo => <Repo key={ repo.id } /> );
+
     return (
       <View style={styles.container}>
         <View style={styles.header}>
@@ -18,13 +46,7 @@ class App extends Component {
         </View>
 
         <ScrollView contentContainerStyle={styles.repoList}>
-          <View style={styles.repo} />
-          <View style={styles.repo} />
-          <View style={styles.repo} />
-          <View style={styles.repo} />
-          <View style={styles.repo} />
-          <View style={styles.repo} />
-          <View style={styles.repo} />
+          { listRepos }
         </ScrollView>
       </View>
     );
@@ -52,13 +74,6 @@ const styles = StyleSheet.create({
   repoList:{ 
     padding: 20 
   },
-  repo: {
-    padding: 20,
-    height: 120,
-    backgroundColor: '#fff',
-    marginBottom: 20,
-    borderRadius: 5
-  }
 });
 
 export default App;
