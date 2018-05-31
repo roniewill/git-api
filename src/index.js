@@ -9,7 +9,7 @@ import {
   AsyncStorage
 } from 'react-native';
 
-import Repo from '@components/Repo';
+import RepoList from '@components/RepoList';
 import Header from '@components/Header';
 import NewRepoModal from '@components/NewRepoModal';
 
@@ -56,16 +56,11 @@ class App extends Component {
   }
 
   render() {
-
-    const listRepos = this.state.repos.map( repo => <Repo key={ repo.id } repo={repo} /> );
-
     return (
       <View style={styles.container}>
         <Header  onShowModal={ this._modalShow } />
 
-        <ScrollView contentContainerStyle={styles.repoList}>
-          { listRepos }
-        </ScrollView>
+        <RepoList repos={ this.state.repos }/>
 
         <NewRepoModal 
           onCancel={ this._modalClose }
@@ -81,9 +76,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#737373',
-  },
-  repoList:{ 
-    padding: 20 
   },
 });
 

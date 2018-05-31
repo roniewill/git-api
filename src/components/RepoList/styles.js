@@ -1,4 +1,7 @@
 export default {
+    repoList:{ 
+        padding: 20 
+    },
     repo: {
         padding: 20,
         backgroundColor: '#fff',
